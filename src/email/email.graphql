@@ -1,0 +1,33 @@
+# TYPES
+type User {
+  email: String!
+}
+
+type Email {
+  _id: String!
+  to: String!
+  body: String!
+  subject: String!
+  from: User!
+}
+
+# INPUT
+input EmailCreate {
+  to: String!
+  body: String!
+  subject: String!
+}
+
+# MUTATIONS
+type Mutation {
+  EMAIL_create(email: EmailCreate!): String!
+}
+# QUERIES
+type Query {
+  EMAIL_listReceived: [Email]!
+  EMAIL_listSent: [Email]!
+}
+# SUBSCRIPTIONS
+type Subscription {
+  EMAIL_newReceivedEmail(token: String!): Email!
+}

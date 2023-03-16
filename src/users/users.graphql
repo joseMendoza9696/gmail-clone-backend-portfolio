@@ -1,0 +1,16 @@
+# INPUT
+input AuthUser {
+  email: String!
+  password: String!
+}
+
+# TYPES
+type Auth {
+  token: String!
+}
+
+# MUTATIONS
+type Mutation {
+  USER_login(login: AuthUser!): Auth!
+  USER_register(register: AuthUser!): Auth!
+}
