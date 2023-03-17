@@ -9,6 +9,9 @@ type Email {
   body: String!
   subject: String!
   from: User!
+  createdAt: Date!
+  trash: Boolean!
+  read: Boolean!
 }
 
 # INPUT
@@ -21,11 +24,14 @@ input EmailCreate {
 # MUTATIONS
 type Mutation {
   EMAIL_create(email: EmailCreate!): String!
+  EMAIL_moveTrashEmail(emailId: String!): String!
+  EMAIL_readEmail(emailId: String!): String!
 }
 # QUERIES
 type Query {
   EMAIL_listReceived: [Email]!
   EMAIL_listSent: [Email]!
+  EMAIL_listTrash: [Email]!
 }
 # SUBSCRIPTIONS
 type Subscription {

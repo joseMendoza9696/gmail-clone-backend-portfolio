@@ -36,6 +36,18 @@ export class EmailResolver {
     return this.emailService.createEmail(email, decodedToken);
   }
 
+  @Mutation('EMAIL_moveTrashEmail')
+  @UseGuards(AuthGuard)
+  async moveTrashEmail(@Args('emailId') emailId: string) {
+    return this.emailService.moveTrashEmail(emailId);
+  }
+
+  @Mutation('EMAIL_readEmail')
+  @UseGuards(AuthGuard)
+  async readEmail(@Args('emailId') emailId: string) {
+    return this.emailService.readEmail(emailId);
+  }
+
   // QUERIES
   @Query('EMAIL_listReceived')
   @UseGuards(AuthGuard)
@@ -53,6 +65,15 @@ export class EmailResolver {
       context.req.headers['authorization'].slice(7),
     );
     return this.emailService.emailsSent(decodedToken);
+  }
+
+  @Query('EMAIL_listTrash')
+  @UseGuards(AuthGuard)
+  async emailsTrash(@Context() context: any) {
+    const decodedToken = this.authService.verifyToken(
+      context.req.headers['authorization'].slice(7),
+    );
+    return this.emailService.emailsTrash(decodedToken);
   }
 
   // SUBSCRIPTIONS

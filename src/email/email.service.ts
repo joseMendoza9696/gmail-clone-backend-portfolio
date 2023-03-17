@@ -38,6 +38,7 @@ export class EmailService {
         body: email.body,
         subject: email.subject,
         from: decodedToken.id,
+        createdAt: new Date(),
       }).save();
       const response = await newEmail.populate('from');
 
@@ -60,7 +61,9 @@ export class EmailService {
       const emails = await this.emailModel
         .find({
           to: decodedToken.email,
+          trash: false,
         })
+        .sort({ createdAt: 'desc' })
         .populate('from');
 
       return emails;
@@ -76,9 +79,47 @@ export class EmailService {
       const emails = await this.emailModel
         .find({
           from: decodedToken.id,
+          trash: false,
         })
+        .sort({ createdAt: 'desc' })
         .populate('from');
       return emails;
+    } catch (error) {
+      return new GraphQLError(error, error.extensions);
+    }
+  }
+
+  async moveTrashEmail(emailId: string): Promise<string | GraphQLError> {
+    try {
+      await this.emailModel.findByIdAndUpdate(emailId, { trash: true });
+      return 'email moved to trash';
+    } catch (error) {
+      return new GraphQLError(error, error.extensions);
+    }
+  }
+
+  async emailsTrash(
+    decodedToken: DecodedToken,
+  ): Promise<Email[] | GraphQLError> {
+    try {
+      const emailsInTrash = await this.emailModel
+        .find({
+          to: decodedToken.email,
+          trash: true,
+        })
+        .sort({ createdAt: 'desc' })
+        .populate('from');
+
+      return emailsInTrash;
+    } catch (error) {
+      return new GraphQLError(error, error.extensions);
+    }
+  }
+
+  async readEmail(emailId: string) {
+    try {
+      await this.emailModel.findByIdAndUpdate(emailId, { read: true });
+      return 'email read';
     } catch (error) {
       return new GraphQLError(error, error.extensions);
     }

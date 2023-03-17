@@ -29,10 +29,17 @@ export class Email {
     body: string;
     subject: string;
     from: User;
+    createdAt: Date;
+    trash: boolean;
+    read: boolean;
 }
 
 export abstract class IMutation {
     abstract EMAIL_create(email: EmailCreate): string | Promise<string>;
+
+    abstract EMAIL_moveTrashEmail(emailId: string): string | Promise<string>;
+
+    abstract EMAIL_readEmail(emailId: string): string | Promise<string>;
 
     abstract USER_login(login: AuthUser): Auth | Promise<Auth>;
 
@@ -43,6 +50,8 @@ export abstract class IQuery {
     abstract EMAIL_listReceived(): Nullable<Email>[] | Promise<Nullable<Email>[]>;
 
     abstract EMAIL_listSent(): Nullable<Email>[] | Promise<Nullable<Email>[]>;
+
+    abstract EMAIL_listTrash(): Nullable<Email>[] | Promise<Nullable<Email>[]>;
 }
 
 export abstract class ISubscription {
