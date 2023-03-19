@@ -7,15 +7,15 @@ import {
   Subscription,
 } from '@nestjs/graphql';
 // UTILS
-import { AuthService } from 'src/utils/auth.service';
+import { AuthService } from '../utils/auth.service';
 import { EmailService } from './email.service';
 // GUARDS
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/utils/auth.guard';
+import { AuthGuard } from '../utils/auth.guard';
 // DTO
 import { EmailCreate } from './dto/email.dto';
 // CONSTANTS
-import { pubSub } from 'src/constants';
+import { pubSub } from '../constants';
 
 @Resolver()
 export class EmailResolver {

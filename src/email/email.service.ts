@@ -6,10 +6,10 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { GraphQLError } from 'graphql';
 // SCHEMAS
-import { Email } from 'src/mongodb/schemas/emails.schema';
-import { User } from 'src/mongodb/schemas/users.schema';
+import { Email } from '../mongodb/schemas/emails.schema';
+import { User } from '../mongodb/schemas/users.schema';
 // UTILS
-import { pubSub } from 'src/constants';
+import { pubSub } from '../constants';
 
 @Injectable()
 export class EmailService {

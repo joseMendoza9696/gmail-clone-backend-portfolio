@@ -1,14 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 // DTOS
 import { UserAuth } from './dto/users.dto';
 // UTILS
-import { AuthService } from 'src/utils/auth.service';
+import { AuthService } from '../utils/auth.service';
 // GRAPHQL
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { GraphQLError } from 'graphql';
 // SCHEMAS
-import { User } from 'src/mongodb/schemas/users.schema';
+import { User } from '../mongodb/schemas/users.schema';
 
 @Injectable()
 export class UsersService {
@@ -26,7 +25,7 @@ export class UsersService {
 
       // if user is not found
       if (!userFound) {
-        throw new Error('Invalid User or password');
+        throw new UnprocessableEntityException('Invalid User or password');
       }
 
       // compare the password with the hashed password
@@ -36,7 +35,7 @@ export class UsersService {
       );
       // if password is invalid
       if (!passwordVerified) {
-        throw new Error('Invalid User or password');
+        throw new UnprocessableEntityException('Invalid Email or password');
       }
 
       // create and return JWT
@@ -44,7 +43,7 @@ export class UsersService {
         token: this.authService.createUserToken(userFound.id, userFound.email),
       };
     } catch (error) {
-      return new GraphQLError(error, error.extensions);
+      throw new UnprocessableEntityException('Invalid Email or password');
     }
   }
 
@@ -66,7 +65,7 @@ export class UsersService {
         token: this.authService.createUserToken(newUser.id, newUser.email),
       };
     } catch (error) {
-      return new GraphQLError(error, error.extensions);
+      throw new UnprocessableEntityException('Email already exists');
     }
   }
 }
